@@ -6,119 +6,7 @@ function getRandomInt(a_min, a_max) {
   return Math.floor(Math.random() * (a_max - a_min + 1)) + a_min;
 }
 
-// Enclose the string form of a negative number in parathensis if necessary.
-function enclose(a_number) {
-  if (a_number < 0) {
-    return "(" + a_number + ")";
-  }
 
-  return a_number.toString();
-}
-
-// Generates an equation with a random number of randomly-generated
-// integers and operations.
-//
-// These equations are calculated from left-to right, and NOT via
-// the order of operations (PEMDAS).
-function generateRandomEquation() {
-  // Get the number of numbers and operations to generate.
-  var l_numbers = getRandomInt(2, 10);
-  var l_operations = l_numbers - 1;
-
-  // Generated numbers and operations will be placed in
-  // these arrays.
-  var l_numberArray = [];
-  var l_opArray = [];
-
-  // Generate our numbers.
-  for (var i = 0; i < l_numbers; ++i) {
-    // An integer between 1 and 100 will do.
-    var l_number = getRandomInt(1, 100);
-
-    // Draw another number to determine whether this number
-    // will be positive or negative.
-    var l_invert = getRandomInt(0, 1);
-    if (l_invert === 0) l_numberArray.push(-l_number);
-    else l_numberArray.push(l_number);
-  }
-
-  // Now randomly generate our operations.
-  for (var i = 0; i < l_operations; ++i) {
-    // 0: Addition
-    // 1: Subtraction
-    // 2: Multiplication
-    // 3: Division
-    l_opArray.push(getRandomInt(0, 3));
-  }
-
-  // Store the first number in our array.
-  var l_result = l_numberArray[0];
-
-  // Also, store the equation in a string to be returned.
-  var l_string = l_numberArray[0];
-
-  // Now iterate through each number...
-  for (var i = 1; i < l_numbers; ++i) {
-    //...and apply our operations to each subsequent number,
-    // appending our string as we go.
-    switch (l_opArray[i - 1]) {
-      case 0:
-        l_result += l_numberArray[i];
-        l_string += " + " + enclose(l_numberArray[i]);
-        break;
-      case 1:
-        l_result -= l_numberArray[i];
-        l_string += " - " + enclose(l_numberArray[i]);
-        break;
-      case 2:
-        l_result *= l_numberArray[i];
-        l_string += " * " + enclose(l_numberArray[i]);
-        break;
-      case 3:
-        l_result /= l_numberArray[i];
-        l_string += " / " + enclose(l_numberArray[i]);
-        break;
-    }
-  }
-
-  return l_string;
-
-  // Now finish out our string and return it.
-  l_string += " = " + l_result;
-  return l_string;
-}
-
-// $(document).ready(function () {
-//     $("#btn-generate").click(function () {
-//         $("#equations").append(
-//             "<p>" + generateRandomEquation() + "</p>"
-//         );
-//     });
-// });
-
-// console.log(generateRandomEquation ())
-
-// console.log(getRandomInt(2,100));
-
-// let operation =getRandomInt(0,4);
-// switch(operation){
-//
-
-// const getRandomEquation = (score=0) => {
-//     const operations = ['+', '-', '*', '/', '%'];
-//     const num1 = Math.floor(Math.random() * (score + 1))
-//     const num2 = Math.floor(Math.random() * (score + 1))
-
-//     const operation = operations[Math.floor(Math.random() * operations.length)]
-//     console.log(operation)
-//     if (operation === '/') {
-//         if (num2 === 0) {
-//             num2 = 1
-//         }
-//         return `${num1 * num2} ${operation} ${num2}`
-//     }
-//     return `${num1} ${operation} ${num2}`
-// }
 
 const btnsData = () => {
   const btns = document.querySelector(".btns");
@@ -150,7 +38,7 @@ const btnsData = () => {
   btns.innerHTML = result;
 };
 btnsData();
-
+let userArr=[] ;
 const numberBtn = document.querySelectorAll(".btns button");
 let score = 0;
 let varible=5;
@@ -200,7 +88,7 @@ const creatEquation = () => {
       break;
     case 3:
       console.log(num1 + "/" + num2);
-      equation = num1 + "/" + num2;
+      equation = (num1*num2) + "/" + num2;
       break;
     case 4:
       console.log(num1 + "%" + num2);
@@ -235,8 +123,10 @@ const showResult =()=>{
         else{
             console.log('hiii');
             console.log(document.querySelector('.math-part'))
+            document.getElementById('nameInput').value=''
             document.querySelector('.math-part').classList.replace('d-block','d-none');
-            document.querySelector('.name-part').classList.replace('d-none','d-block')
+            document.querySelector('.name-part').classList.replace('d-none','d-block');
+            varible=0;
         }
 
     })
@@ -246,27 +136,40 @@ document.getElementsByTagName('form')[0].addEventListener('submit',(e)=>{
     e.preventDefault()
     console.log('kkkkk');
     const nameInput= document.getElementById('nameInput')
-    displayResult(nameInput.value,score)
+    
+    userArr.push({name:nameInput.value , score})
+    userArr.sort((a, b) => (a.score < b.score) ? 1 : -1);
+    
+    console.log(userArr);
     document.querySelector('.math-part').classList.replace('d-none','d-block');
     document.querySelector('.name-part').classList.replace('d-block','d-none');
     document.getElementById("input").value='';
     score=0;
     displayEquation()
     editScore()
+    displayResult(userArr);
 
 })
-const displayResult= (value,score)=>{
-    document.getElementsByTagName('tbody')[0].innerHTML += `
-                   <tr>
-                    <td  class="text-center">${userNumber++}</td>
-                    <td  class="text-center">${value}</td>
-                    <td  class="text-center">${score}</td>
-                  </tr>
-                
+const displayResult= (arr)=>{
     
-    `
+    let result = ''
+
+    arr.forEach((item,index)=>{
+        result +=`
+        <tr>
+        <td  class="text-center">${index}</td>
+        <td  class="text-center">${item.name}</td>
+        <td  class="text-center">${item.score}</td>
+      </tr>
+        
+        `
+    })
+
+    document.getElementsByTagName('tbody')[0].innerHTML = result
 
 }
+
+displayResult(userArr);
 console.log(creatEquation());
 editScore();
 displayEquation();
