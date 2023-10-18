@@ -157,7 +157,7 @@ const displayResult= (arr)=>{
     arr.forEach((item,index)=>{
         result +=`
         <tr>
-        <td  class="text-center">${index}</td>
+        <td  class="text-center">${index+1}</td>
         <td  class="text-center">${item.name}</td>
         <td  class="text-center">${item.score}</td>
       </tr>
