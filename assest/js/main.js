@@ -1,3 +1,10 @@
+let userArr=[] ;
+let score = 0;
+let varible=5;
+let userNumber = 1;
+const equation = document.querySelector('.equation');
+
+
 // Generate a random integer between the given bounds.
 function getRandomInt(a_min, a_max) {
   a_min = Math.ceil(a_min);
@@ -5,9 +12,6 @@ function getRandomInt(a_min, a_max) {
 
   return Math.floor(Math.random() * (a_max - a_min + 1)) + a_min;
 }
-
-
-
 const btnsData = () => {
   const btns = document.querySelector(".btns");
   let result = "";
@@ -38,12 +42,7 @@ const btnsData = () => {
   btns.innerHTML = result;
 };
 btnsData();
-let userArr=[] ;
 const numberBtn = document.querySelectorAll(".btns button");
-let score = 0;
-let varible=5;
-let userNumber = 1;
-const equation = document.querySelector('.equation');
 numberBtn.forEach((item) => {
   item.addEventListener("click", () => {
     if (item.innerText != "clear" && item.innerText != "Enter") {
@@ -111,9 +110,18 @@ const showResult =()=>{
     
     Enter.addEventListener('click',()=>{
 
+      if(document.getElementById("input").value===''){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'you must enter answer',
+        })
+        return;
+      }
+
        const equ= equation.innerText.toString().split('=')[0]
         
-        if(eval(equ) == document.getElementById("input").value){
+        if(eval(equ) === parseInt(document.getElementById("input").value) ){
             score += 10 ;
             editScore();
             document.getElementById("input").value=''
@@ -121,7 +129,7 @@ const showResult =()=>{
 
         }
         else{
-            console.log('hiii');
+            // console.log('hiii');
             console.log(document.querySelector('.math-part'))
             document.getElementById('nameInput').value=''
             document.querySelector('.math-part').classList.replace('d-block','d-none');

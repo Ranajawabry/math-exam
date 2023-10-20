@@ -12,3 +12,7 @@ body {
 .btn-background{
     background-color: rgb(16, 158, 158);
 }
+h1{
+    background-color: rgb(16, 158, 158);
+    color: white;
+}
